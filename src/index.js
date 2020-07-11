@@ -17,10 +17,13 @@ io.on('connection', (socket) => {
     console.log('New Websocket connection')
     // broadcast emits event to all except this particular socket
     socket.broadcast.emit('message', 'A new user has joined!')
-    
     socket.emit('message', 'Welcome!')
+
     socket.on('sendMessage', (message) => {
         io.emit('message', message)
+    })
+    socket.on('sendLocation', ({latitude, longitude} = {}) => {
+        io.emit('message', `User location: https://google.com/maps?q=${latitude},${longitude}`)
     })
 
     socket.on('disconnect', () => {
